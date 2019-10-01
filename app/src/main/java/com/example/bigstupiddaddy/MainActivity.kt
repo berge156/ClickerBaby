@@ -3,55 +3,60 @@ package com.example.bigstupiddaddy
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.View
-import com.example.bigstupiddaddy.util.toggleVisibility
+import com.example.bigstupiddaddy.util.dissapear
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private var cookieCounter: Long = 0
-    private val store = getPreferences(Context.MODE_PRIVATE)
+    private var counter: Long = 0
+    fun getStore() = getPreferences(Context.MODE_PRIVATE)
+    var COOKIE_COUNTER_KEY: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (savedInstanceState != null){
-            Log.d("TEST", "recreating saved state from $savedInstanceState")
-            cookieCounter = savedInstanceState.getLong(COOKIE_COUNTER_KEY,0)
+        val usrname = intent.extras?.get("username").toString().trim()
+        COOKIE_COUNTER_KEY = usrname
+
+        if(savedInstanceState != null){
+            updateCounter(savedInstanceState.getLong(COOKIE_COUNTER_KEY, 0))
+        }else if (getStore().contains(COOKIE_COUNTER_KEY)){
+            updateCounter(getStore().getLong(COOKIE_COUNTER_KEY, 0))
         }
 
         myButton.setOnClickListener {
-            brandonImage.visibility = View.VISIBLE
+            counter++
+            cookie_score.text = counter.toString()
+            brandonImage.dissapear()
+
+            myButton.text = when(counter){
+                1L -> "stop"
+                in 2 .. 9 -> myButton.text.toString().plus("!")
+                else -> myButton.text
+            }
+
         }
 
-        myButton.setOnClickListener {
-            cookieCounter++
-            brandonImage.toggleVisibility()
-            cookie_score.text = cookieCounter.toString()
+    }
 
-        }
+    private fun updateCounter(count:Long){
+        counter = count
+        cookie_score.text = "${counter}"
+    }
 
-
-        }
-
-    override fun onPause() {
+    override fun onPause(){
         super.onPause()
-        store.edit().putLong(COOKIE_COUNTER_KEY, cookieCounter).commit()
+        getStore().edit().putLong(COOKIE_COUNTER_KEY, counter).apply()
     }
 
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+    override fun onSaveInstanceState(outState: Bundle?) {
         outState?.run{
-            Log.d("TEST", "got to onSaveInstanceState")
-            putLong(COOKIE_COUNTER_KEY, cookieCounter)
+            putLong(COOKIE_COUNTER_KEY, counter)
         }
 
-        super.onSaveInstanceState(outState, outPersistentState)
-    }
-
-    companion object {
-        private const val COOKIE_COUNTER_KEY = "cookieCounterKey"
-    }
+        super.onSaveInstanceState(outState)
 
     }
+
+}
