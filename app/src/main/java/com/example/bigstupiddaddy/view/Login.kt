@@ -1,16 +1,12 @@
-package com.example.bigstupiddaddy
+package com.example.bigstupiddaddy.view
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.os.PersistableBundle
-import android.util.Log
-import android.view.View
-import com.example.bigstupiddaddy.util.toggleVisibility
+import com.example.bigstupiddaddy.R
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_main.*
 
 class Login : AppCompatActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
