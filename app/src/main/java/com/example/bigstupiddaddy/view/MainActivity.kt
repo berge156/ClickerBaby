@@ -8,15 +8,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.example.bigstupiddaddy.R
+import com.example.bigstupiddaddy.viewmodel.APIrepository
 import com.example.bigstupiddaddy.viewmodel.CountViewModel
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import com.bumptech.glide.Glide
+import com.example.bigstupiddaddy.Model.Gif
 
 class MainActivity : AppCompatActivity() {
 
     // Creates the viewmodel
     private lateinit var countViewModel: CountViewModel
+    private lateinit var APIrepository: APIrepository
 
     // Sets your counter to = 0 in the begining
     private var counter: Long = 0
@@ -33,6 +37,11 @@ class MainActivity : AppCompatActivity() {
         countViewModel.getUserCount(getUsername()).observe(this,
             androidx.lifecycle.Observer { updateCounter(it) })
 
+        APIrepository = ViewModelProviders.of(this).get(APIrepository::class.java)
+        APIrepository.getRandomGif("android").observe(this,
+            androidx.lifecycle.Observer { loadGif(it) })
+
+
         // The Onset Click.
         myButton.setOnClickListener {
             countViewModel.setUserCount(getUsername(), counter + 1)
@@ -43,5 +52,12 @@ class MainActivity : AppCompatActivity() {
     private fun updateCounter(count: Long) {
         counter = count
         cookie_score.text = counter.toString()
+
+    private fun loadGif(gif: Gif){
+
+    }
+        Glide.with(this)
+            .load(gif.url)
+            .into(GifView)
     }
 }
