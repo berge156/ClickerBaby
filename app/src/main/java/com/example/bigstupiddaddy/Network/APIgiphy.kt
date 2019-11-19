@@ -10,20 +10,20 @@ import retrofit2.http.Query
 import okhttp3.OkHttpClient
 
 
-interface Api {
+interface APIgiphy {
     @GET("v1/gifs/random")
     fun getRandomGif(@Query("tag") tag: String,
                      @Query("rating") rating: String,
                      @Query("api_key") apiKey: String): Call<GifResponse>
 
     companion object{
-        fun create(context: Context) : Api{
+        fun create(context: Context) : APIgiphy{
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl("https://api.giphy.com/")
                 .build()
 
-            return retrofit.create(Api::class.java)
+            return retrofit.create(APIgiphy::class.java)
 
         }
     }

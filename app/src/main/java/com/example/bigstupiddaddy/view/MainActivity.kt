@@ -1,31 +1,26 @@
 package com.example.bigstupiddaddy.view
 
-import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.example.bigstupiddaddy.R
-import com.example.bigstupiddaddy.viewmodel.APIrepository
+import com.example.bigstupiddaddy.APIrepository
 import com.example.bigstupiddaddy.viewmodel.CountViewModel
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 import com.bumptech.glide.Glide
 import com.example.bigstupiddaddy.Model.Gif
+import com.example.bigstupiddaddy.viewmodel.GifViewModel
 
 class MainActivity : AppCompatActivity() {
 
     // Creates the viewmodel
     private lateinit var countViewModel: CountViewModel
-    private lateinit var APIrepository: APIrepository
+    private lateinit var gifViewModel: GifViewModel
 
     // Sets your counter to = 0 in the begining
     private var counter: Long = 0
     // Gets the user name, so that you can login or continue to build the score with your account
-    private fun getUsername() = intent.extras?.get("username").toString().toLowerCase(Locale.US)
+    private fun getUsername() = intent.extras?.get("username").toString().trim()
 
     // Saved Instance State
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,8 +32,8 @@ class MainActivity : AppCompatActivity() {
         countViewModel.getUserCount(getUsername()).observe(this,
             androidx.lifecycle.Observer { updateCounter(it) })
 
-        APIrepository = ViewModelProviders.of(this).get(APIrepository::class.java)
-        APIrepository.getRandomGif("android").observe(this,
+        gifViewModel = ViewModelProviders.of(this).get(GifViewModel::class.java)
+        gifViewModel.getRandomGif("android").observe(this,
             androidx.lifecycle.Observer { loadGif(it) })
 
 
@@ -52,10 +47,11 @@ class MainActivity : AppCompatActivity() {
     private fun updateCounter(count: Long) {
         counter = count
         cookie_score.text = counter.toString()
-
-    private fun loadGif(gif: Gif){
-
     }
+
+    private fun loadGif(gif: Gif) {
+
+
         Glide.with(this)
             .load(gif.url)
             .into(GifView)

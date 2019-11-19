@@ -59,7 +59,7 @@
         android:layout_width="255dp"
         android:layout_height="52dp"
         android:text="RANDOM GIF ;)"
-        android:textSize="36"
+        android:textSize="36dp"
         tools:layout_editor_absoluteX="89dp"
         tools:layout_editor_absoluteY="520dp" />
 
@@ -68,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="_________________________________________"
-        android:textSize="20"
+        android:textSize="20dp"
         tools:layout_editor_absoluteX="2dp"
         tools:layout_editor_absoluteY="554dp" />
 
